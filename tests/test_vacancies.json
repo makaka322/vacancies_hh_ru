@@ -23,45 +23,5 @@
     "accept_temporary": false,
     "is_adv_vacancy": false,
     "adv_context": null
-  },
-  {
-    "id": "108424453",
-    "premium": false,
-    "name": "Python Developer (Remote)",
-    "department": null,
-    "salary": null,
-    "alternate_url": "https://hh.ru/vacancy/108424453",
-    "relations": [],
-    "snippet": {
-      "requirement": "Коммерческий опыт создания веб-приложений с использованием <highlighttext>Python</highlighttext>-фреймворков (Django, FastAPI, Flask) от 1 года. Знание <highlighttext>Python</highlighttext> Core и встроенной...",
-      "responsibility": null
-    },
-    "contacts": null,
-    "schedule": {
-      "id": "fullDay",
-      "name": "Полный день"
-    },
-    "working_days": [],
-    "working_time_intervals": [],
-    "working_time_modes": [],
-    "accept_temporary": false,
-    "professional_roles": [
-      {
-        "id": "96",
-        "name": "Программист, разработчик"
-      }
-    ],
-    "accept_incomplete_resumes": false,
-    "experience": {
-      "id": "between1And3",
-      "name": "От 1 года до 3 лет"
-    },
-    "employment": {
-      "id": "full",
-      "name": "Полная занятость"
-    },
-    "adv_response_url": null,
-    "is_adv_vacancy": false,
-    "adv_context": null
   }
 ]
