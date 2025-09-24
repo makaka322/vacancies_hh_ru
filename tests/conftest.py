@@ -17,7 +17,7 @@ def vacancy_2():
 
 @pytest.fixture
 def json_file():
-    return JsonFile(r"C:\Users\Тёма\PycharmProjects\vacancies_hh_ru\date\vacancies.json")
+    return JsonFile(r"C:\Users\natal\PycharmProjects\my_pro\vacancies_hh_ru\date\vacancies.json")
 
 
 @pytest.fixture

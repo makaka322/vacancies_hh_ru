@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, List, Dict
+from typing import Any
 import requests
 
 
@@ -7,51 +7,42 @@ class BaseHH(ABC):
     """Абстрактный класс для работы с API сервиса с вакансиями"""
 
     @abstractmethod
-    def get_vacancies(self, keyword: str, page_count: int = 1) -> List[Dict[str, Any]]:
-        """Абстрактный метод для получения вакансий"""
+    def get_vacancies(self, keyword: str) -> list[dict[Any, Any]]:
+        """Абстрактный метод для получения вакансии"""
         pass
 
 
 class HeadHunterAPI(BaseHH):
     """Класс для работы с API HeadHunter"""
 
+    __url: str
+    __params: dict
+    __vacancies: list
+
     def __init__(self) -> None:
-        """Инициализация экземпляра класса HeadHunterAPI"""
-        self._url = "https://api.hh.ru/vacancies"
-        self._vacancies: List[Dict[str, Any]] = []
+        """Инициализация экземпляров класса HeadHunterAPI"""
 
-    def get_vacancies(self, keyword: str, page_count: int = 1) -> List[Dict[str, Any]]:
-        """Получение вакансий с сайта hh.ru"""
-        params = {"text": keyword, "page": 0, "per_page": 100}
-        self._vacancies.clear()
+        self.__url = "https://api.hh.ru/vacancies"
+        self.__params = {"text": "", "page": 0, "per_page": 100}
+        self.__vacancies = []
 
-        for page in range(page_count):
-            params["page"] = page
-            try:
-                response = requests.get(self._url, params=params)
-                response.raise_for_status()
-            except requests.RequestException as e:
-                raise ConnectionError(f"Ошибка при подключении к API: {e}")
+    def __is_connect(self) -> bool:
+        """Метод для подключения к API"""
+        response = requests.get(self.__url)
+        if response.status_code == 200:
+            return True
+        raise ValueError("Не удалось получить информацию по вакансиям")
 
-            data = response.json()
-            items = data.get("items", [])
-            if not items:
-                # Если вакансий нет, можно прервать цикл
-                break
-            self._vacancies.extend(items)
+    def get_vacancies(self, keyword: str, page_count: int = 1) -> list[dict[Any, Any]]:
+        """Метод получения вакансия с сайта hh.ry"""
+        self.__params["text"] = keyword
 
-        if not self._vacancies:
-            raise ValueError("По указанному запросу нет вакансий")
-
-        return self._vacancies
-
-
-# Пример использования
-if __name__ == "__main__":
-    hh_api = HeadHunterAPI()
-    try:
-        vacancies = hh_api.get_vacancies("Python developer", page_count=2)
-        for vac in vacancies:
-            print(vac["name"], "-", vac["employer"]["name"])
-    except Exception as e:
-        print("Ошибка:", e)
+        while self.__params.get("page") != page_count and self.__is_connect():
+            response = requests.get(self.__url, params=self.__params)
+            if len(response.json()["items"]) <= 0:
+                raise ValueError("По указанному запросу нет вакансий")
+            else:
+                vacancies = response.json()["items"]
+                self.__vacancies.extend(vacancies)
+                self.__params["page"] += 1
+        return self.__vacancies

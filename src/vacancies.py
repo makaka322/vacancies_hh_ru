@@ -4,8 +4,15 @@ class Vacancy:
     __slots__ = ("id", "name", "salary_from", "salary_to", "currency", "url", "requirements")
 
     def __init__(
-        self, id: str, name: str, url: str, requirements: str, salary_from: int = 0, salary_to: int = 0,
-            currency: str = "RUB") -> None:
+        self,
+        id: str,
+        name: str,
+        url: str,
+        requirements: str,
+        salary_from: int = 0,
+        salary_to: int = 0,
+        currency: str = "RUB",
+    ) -> None:
         """Инициализация экземпляров класса Vacancy"""
         self.id = id
         self.name = name
@@ -18,12 +25,12 @@ class Vacancy:
 
     def __salary_negative(self):
         """Метод валидации зарплаты."""
-        salary_attributes = {'salary_from': self.salary_from, 'salary_to': self.salary_to}
+        salary_attributes = {"salary_from": self.salary_from, "salary_to": self.salary_to}
 
         for attr, value in salary_attributes.items():
             if value is not None and value < 0:
                 setattr(self, attr, 0)
-                print(f'Отрицательное значение {attr} заменено на 0')
+                print(f"Отрицательное значение {attr} заменено на 0")
 
     def __str__(self) -> str:
         """Метод, который отображает информацию об объекте класса Vacancy для пользователей"""
@@ -86,4 +93,3 @@ class Vacancy:
             "currency": self.currency,
         }
         return vacancy_dict
-
