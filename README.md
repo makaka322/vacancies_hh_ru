@@ -33,3 +33,14 @@ pip install -r requirements.txt
 ## Тестирование
 Для проекта реализованы тесты на pytest. Запустить можно командой `pytest .`
 Покрытие:
+src\api_hh_ru.py             30      1    97%   12
+src\json_file.py             45     25    44%   24, 30-37, 42-50, 55-64
+src\vacancies.py             53      3    94%   70, 76, 82
+src\vacancies_list.py        85     67    21%   14-18, 23-26, 30, 34-35, 39-44, 48, 52-63, 67-78, 82-84, 88, 92-106, 110-126
+src\worked_file.py           11      3    73%   10, 15, 20
+tests\conftest.py            33      6    82%   126-131
+tests\test_hh_api.py         25      0   100%
+tests\test_json_file.py      35      9    74%   18-19, 33-37, 71-72, 79-80
+tests\test_vacancies.py      45      0   100%
+-------------------------------------------------------
+TOTAL                       362    114    69%
