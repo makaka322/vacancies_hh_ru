@@ -4,15 +4,8 @@ class Vacancy:
     __slots__ = ("id", "name", "salary_from", "salary_to", "currency", "url", "requirements")
 
     def __init__(
-        self,
-        id: str,
-        name: str,
-        url: str,
-        requirements: str,
-        salary_from: int = 0,
-        salary_to: int = 0,
-        currency: str = "RUB",
-    ) -> None:
+        self, id: str, name: str, url: str, requirements: str, salary_from: int = 0, salary_to: int = 0,
+            currency: str = "RUB") -> None:
         """Инициализация экземпляров класса Vacancy"""
         self.id = id
         self.name = name
@@ -25,12 +18,12 @@ class Vacancy:
 
     def __salary_negative(self):
         """Метод валидации зарплаты."""
-        salary_attributes = {"salary_from": self.salary_from, "salary_to": self.salary_to}
+        salary_attributes = {'salary_from': self.salary_from, 'salary_to': self.salary_to}
 
         for attr, value in salary_attributes.items():
             if value is not None and value < 0:
                 setattr(self, attr, 0)
-                print(f"Отрицательное значение {attr} заменено на 0")
+                print(f'Отрицательное значение {attr} заменено на 0')
 
     def __str__(self) -> str:
         """Метод, который отображает информацию об объекте класса Vacancy для пользователей"""
@@ -51,39 +44,54 @@ class Vacancy:
             if vacancy["salary"] is None:
                 salary_from, salary_to, currency = 0, 0, "RUB"
             else:
-                salary_from = vacancy["salary"]["from"]
-                salary_to = vacancy.get("salary", {}).get("to")
-                currency = vacancy["salary"]["currency"]
+                salary_from = vacancy["salary"].get("from") or 0
+                salary_to = vacancy["salary"].get("to") or 0
+                currency = vacancy["salary"]["currency"] or "RUB"
             vacancies_list.append(cls(id, name, url, requirements, salary_from, salary_to, currency))
         return vacancies_list
 
     def __eq__(self, other) -> bool:
         """Метод сравнения на равенство экземпляров класса по зарплате"""
-        if type(other) is Vacancy:
-            return self.salary_from == other.salary_from
-        raise TypeError
+        if not isinstance(other, Vacancy):
+            raise TypeError(f"Некорректный тип сравнения: {type(other)}")
+        # Обработка None
+        if self.salary_from is None and other.salary_from is None:
+            return True
+        if self.salary_from is None or other.salary_from is None:
+            return False
+        return self.salary_from == other.salary_from
 
     def __ne__(self, other) -> bool:
         """Метод сравнения на неравенство экземпляров класса по зарплате"""
-        if type(other) is Vacancy:
-            return self.salary_from != other.salary_from
-        raise TypeError
+        return not self.__eq__(other)
 
     def __lt__(self, other) -> bool:
         """Метод сравнения на меньшее из экземпляров класса по зарплате"""
-        if type(other) is Vacancy:
-            return self.salary_from < other.salary_from
-        raise TypeError
+        if not isinstance(other, Vacancy):
+            raise TypeError(f"Некорректный тип сравнения: {type(other)}")
+        if self.salary_from is None and other.salary_from is None:
+            return False
+        if self.salary_from is None:
+            return False  # вакансия без зарплаты считается "больше" любой другой
+        if other.salary_from is None:
+            return True  # вакансия с зарплатой "меньше" вакансии без зарплаты
+        return self.salary_from < other.salary_from
 
-    def __gt__(self, other) -> object:
+    def __gt__(self, other) -> bool:
         """Метод сравнения на большее из экземпляров класса по зарплате"""
-        if type(other) is Vacancy:
-            return self.salary_from > other.salary_from
-        raise TypeError
+        if not isinstance(other, Vacancy):
+            raise TypeError(f"Некорректный тип сравнения: {type(other)}")
+        if self.salary_from is None and other.salary_from is None:
+            return False
+        if self.salary_from is None:
+            return True  # считаем, что None больше любого числа (можно изменить логику)
+        if other.salary_from is None:
+            return False
+        return self.salary_from > other.salary_from
 
     def convert_to_json(self) -> dict:
         """Метод преобразования объекта класса Vacancy в словарь"""
-        vacancy_dict = {
+        return {
             "id": self.id,
             "name": self.name,
             "url": self.url,
@@ -92,4 +100,3 @@ class Vacancy:
             "salary_to": self.salary_to,
             "currency": self.currency,
         }
-        return vacancy_dict

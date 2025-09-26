@@ -20,9 +20,9 @@ class VacanciesList:
     @property
     def vacancies(self):
         """Геттер для корректного вывода списка вакансий"""
-        vacancy_str = ""
+        vacancy_str = ''
         for vacancy in self.__vacancies:
-            vacancy_str += f"{str(vacancy)}\n"
+            vacancy_str += f'{str(vacancy)}\n'
         return vacancy_str
 
     def __len__(self):
